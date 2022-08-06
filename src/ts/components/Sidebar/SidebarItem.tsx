@@ -1,3 +1,4 @@
+import * as React from "react";
 import {
     Box,
     Collapse,
@@ -5,47 +6,67 @@ import {
     ListItemIcon,
     ListItemText,
 } from "@mui/material";
-import { ReactElement, useState } from "react";
 import ExpandLessOutlinedIcon from "@mui/icons-material/ExpandLessOutlined";
+import GlobalState from "../../helpers/globalState";
 
 export interface SidebarItemProps {
     id: string;
-    icon: ReactElement;
+    icon: React.ReactElement;
     name: string;
     children: SidebarItemProps[];
 }
-function SidebarItem(props: SidebarItemProps) {
-    const [open, setOpen] = useState(true);
-    return (
-        <Box>
-            <ListItemButton
-                onClick={(e) => {
-                    if (props.children.length > 0) {
-                        e.preventDefault();
-                        setOpen(!open);
-                    }
-                }}
-            >
-                <ListItemIcon>{props.icon}</ListItemIcon>
-                <ListItemText primary={props.name} />
-                <ExpandLessOutlinedIcon
-                    sx={{
-                        display: props.children.length <= 0 ? "none" : null,
-                        transform: `rotate(${open ? "180deg" : "0deg"})`,
-                        transition: "0.25s",
-                    }}
-                />
-            </ListItemButton>
-            <Collapse in={open} unmountOnExit sx={{ paddingLeft: 2 }}>
-                {renderChildren(props.children)}
-            </Collapse>
-        </Box>
-    );
+
+export interface SidebarItemState {
+    open: boolean;
 }
-function renderChildren(children: SidebarItemProps[]) {
-    return children.map((child, index) => {
-        return <SidebarItem key={child.id} {...child} />;
-    });
+
+class SidebarItem extends React.Component<SidebarItemProps, SidebarItemState> {
+    constructor(props: SidebarItemProps) {
+        super(props);
+        this.state = {
+            open: false,
+        };
+        (window as any).test = this;
+    }
+    render() {
+        return (
+            <Box>
+                <ListItemButton
+                    onClick={(e) => {
+                        if (this.props.children.length > 0) {
+                            e.preventDefault();
+                            this.setState({ open: !this.state.open });
+                        }
+                    }}
+                >
+                    <ListItemIcon>{this.props.icon}</ListItemIcon>
+                    <ListItemText
+                        primary={this.props.name}
+                    />
+                    <ExpandLessOutlinedIcon
+                        sx={{
+                            display:
+                                this.props.children.length <= 0 ? "none" : null,
+                            transform: `rotate(${open ? "180deg" : "0deg"})`,
+                            transition: "0.25s",
+                        }}
+                    />
+                </ListItemButton>
+                <Collapse
+                    in={this.state.open}
+                    unmountOnExit
+                    sx={{ paddingLeft: 2 }}
+                >
+                    {this.renderChildren()}
+                </Collapse>
+            </Box>
+        );
+    }
+    renderChildren = () => {
+        return this.props.children.map((child, index) => {
+            return <SidebarItem key={child.id} {...child} />;
+        });
+    };
 }
 
 export default SidebarItem;

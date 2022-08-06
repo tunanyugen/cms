@@ -1,16 +1,25 @@
 import "./index.scss";
-import { ThemeProvider } from "@mui/material";
+import React from "react";
 import ReactDOM from "react-dom/client";
 import theme from "./theme";
 import GlobalState from "./ts/helpers/globalState";
+import { Theme } from "@mui/material";
+import Apis from "./ts/interfaces/Apis";
 import App from "./ts/app";
 
-const globalState = new GlobalState();
+export interface ApiResponse<T> {
+    items: T;
+}
+
+const apis: Apis = {
+    sidebarItems: null,
+    avatar: null,
+};
+GlobalState.initialize(apis);
+(window as any).GlobalState = GlobalState;
 
 const root = ReactDOM.createRoot(document.querySelector("#root"));
 
-root.render(
-    <ThemeProvider theme={theme}>
-        <App globalState={globalState}/>
-    </ThemeProvider>
-);
+export const ThemeContext = React.createContext<Theme>(theme);
+
+root.render(<App />);

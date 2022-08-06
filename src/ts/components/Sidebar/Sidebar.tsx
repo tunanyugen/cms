@@ -1,26 +1,28 @@
-import { List, Paper, useTheme } from "@mui/material";
-import React from "react";
+import * as React from "react";
+import { List, Paper } from "@mui/material";
 import SidebarItem, { SidebarItemProps } from "./SidebarItem";
+import GlobalState from "../../helpers/globalState";
 
-export interface SidebarProps {
-    items: SidebarItemProps[];
-}
-function Sidebar(props: SidebarProps) {
-    const theme = useTheme();
-    return (
-        <Paper
-            sx={{
-                height: "100%",
-            }}
-        >
-            <List>{renderItems(props.items)}</List>
-        </Paper>
-    );
-}
-function renderItems(items: SidebarItemProps[]) {
-    return items.map((item) => {
-        return <SidebarItem key={item.id} {...item} />;
-    });
+export interface SidebarProps {}
+
+export interface SidebarState {}
+
+class Sidebar extends React.Component<SidebarProps, SidebarState> {
+    constructor(props: SidebarProps) {
+        super(props);
+    }
+    render() {
+        return (
+            <Paper className="sidebar">
+                <List>{this.renderItems()}</List>
+            </Paper>
+        );
+    }
+    renderItems = () => {
+        return GlobalState.state.data.sidebarItems.map((item) => {
+            return <SidebarItem key={item.id} {...item} />;
+        });
+    };
 }
 
 export default Sidebar;

@@ -1,0 +1,26 @@
+@import "./components/navbar.scss";
+@import "./components/sidebar.scss";
+
+.app {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+
+    &__left-column {
+    }
+    &__right-column {
+        display: flex;
+        flex-direction: column;
+    }
+    &__sidebar-container {
+        height: 100%;
+    }
+    &__navbar-container {
+        position: sticky;
+        top: 0;
+        width: 100%;
+    }
+    &__content-container {
+        flex: 1;
+    }
+}

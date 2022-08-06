@@ -1,42 +1,74 @@
 import { SidebarItemProps } from "../components/Sidebar/SidebarItem";
-import fetchSidebarItems from "./dataFetchers/fetchSidebarItems";
-import {v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4 } from "uuid";
+import { Theme } from "@mui/material";
+import theme from "../../theme";
+import DataFetcher from "./dataFetchers/DataFetcher";
+import DefaultDataSidebarItem from "./dataFetchers/defaultData/DefaultDataSidebarItems";
+import DefaultDataAvatar from "./dataFetchers/defaultData/DefaultDataAvatar";
+import Apis from "../interfaces/Apis";
 
 export interface GlobalStateProps {
-    sidebarItems: SidebarItemProps[];
+    theme: Theme;
+    config: {
+        sidebarX: number;
+        navbarY: number;
+    };
+    data: {
+        avatar: string;
+        sidebarItems: SidebarItemProps[];
+    };
 }
 
 export default class GlobalState {
-    private _state: GlobalStateProps = {
-        sidebarItems: [],
+    private static _state: GlobalStateProps = {
+        theme: theme,
+        config: {
+            sidebarX: 270,
+            navbarY: 56,
+        },
+        data: {
+            avatar: "",
+            sidebarItems: [],
+        },
     };
-    public get state() {
-        return { ...this._state };
+    public static get state() {
+        return { ...GlobalState._state };
     }
-    private _subscriptions: { [key: string]: Function } = {};
-    constructor() {
-        fetchSidebarItems().then((result) => {
-            let clonedState = {...this.state};
-            clonedState.sidebarItems = result;
-            this.setState(clonedState);
+    private static _subscriptions: { [key: string]: Function } = {};
+    static initialize = (apis: Apis) => {
+        DataFetcher.fetch<SidebarItemProps[]>(
+            apis.sidebarItems,
+            new DefaultDataSidebarItem().getDefaultData()
+        ).then((result) => {
+            let clonedState = { ...GlobalState.state };
+            clonedState.data.sidebarItems = result.data.items;
+            GlobalState.setState(clonedState);
         });
-    }
-    setState = (
+        DataFetcher.fetch<string>(
+            apis.avatar,
+            new DefaultDataAvatar().getDefaultData()
+        ).then((result) => {
+            let clonedState = { ...GlobalState.state };
+            clonedState.data.avatar = result.data.items[0];
+            GlobalState.setState(clonedState);
+        });
+    };
+    static setState = (
         state: GlobalStateProps,
         callback: (state: GlobalStateProps) => void = () => {}
     ) => {
-        this._state = { ...state };
-        Object.entries(this._subscriptions).forEach((value, index) => {
+        GlobalState._state = { ...state };
+        Object.entries(GlobalState._subscriptions).forEach((value, index) => {
             value[1]();
         });
-        callback(this.state);
+        callback(GlobalState.state);
     };
-    subscribe = (callback: Function): string => {
+    static subscribe = (callback: Function): string => {
         let key = uuidv4();
-        this._subscriptions[key] = callback;
+        GlobalState._subscriptions[key] = callback;
         return key;
-    }
-    unsubscribe = (key: string) => {
-        delete this._subscriptions[key];
-    }
+    };
+    static unsubscribe = (key: string) => {
+        delete GlobalState._subscriptions[key];
+    };
 }
