@@ -27,7 +27,7 @@ class NavbarSearch extends React.Component<
                         </InputAdornment>
                     ),
                     sx: {
-                        height: 34,
+                        height: 28,
                         fontSize: GlobalState.state.theme.typography.fontSize,
                     },
                 }}

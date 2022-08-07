@@ -6,6 +6,8 @@ import DataFetcher from "./dataFetchers/DataFetcher";
 import DefaultDataSidebarItem from "./dataFetchers/defaultData/DefaultDataSidebarItems";
 import DefaultDataAvatar from "./dataFetchers/defaultData/DefaultDataAvatar";
 import Apis from "../interfaces/Apis";
+import NavbarNotificationsNotification, { NavbarNotificationsNotificationProps } from "../components/Navbar/NavbarNotificationsNotification";
+import DefaultDataNotifications from "./dataFetchers/defaultData/DefaultDataNotifications";
 
 export interface GlobalStateProps {
     theme: Theme;
@@ -16,6 +18,7 @@ export interface GlobalStateProps {
     data: {
         avatar: string;
         sidebarItems: SidebarItemProps[];
+        notifications: NavbarNotificationsNotificationProps[]
     };
 }
 
@@ -29,6 +32,7 @@ export default class GlobalState {
         data: {
             avatar: "",
             sidebarItems: [],
+            notifications: [],
         },
     };
     public static get state() {
@@ -52,6 +56,11 @@ export default class GlobalState {
             clonedState.data.avatar = result.data.items[0];
             GlobalState.setState(clonedState);
         });
+        DataFetcher.fetch<NavbarNotificationsNotificationProps[]>(apis.notifications, new DefaultDataNotifications().getDefaultData()).then((result) => {
+            let clonedState = { ...GlobalState.state };
+            clonedState.data.notifications = result.data.items;
+            GlobalState.setState(clonedState);
+        })
     };
     static setState = (
         state: GlobalStateProps,

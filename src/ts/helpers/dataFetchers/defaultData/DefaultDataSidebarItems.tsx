@@ -1,9 +1,10 @@
 import DefaultData from "./DefaultData";
 import InboxIcon from "@mui/icons-material/Inbox";
 import { v4 as uuidv4 } from "uuid";
+import { SidebarItemProps } from "../../../components/Sidebar/SidebarItem";
 
 export default class DefaultDataSidebarItem extends DefaultData {
-    getDefaultData: () => any = () => {
+    getDefaultData: () => {items:SidebarItemProps[]} = () => {
         return {
             items: [
                 {

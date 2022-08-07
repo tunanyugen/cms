@@ -14,6 +14,7 @@ export interface ApiResponse<T> {
 const apis: Apis = {
     sidebarItems: null,
     avatar: null,
+    notifications: null,
 };
 GlobalState.initialize(apis);
 (window as any).GlobalState = GlobalState;
