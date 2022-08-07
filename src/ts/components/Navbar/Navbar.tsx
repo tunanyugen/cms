@@ -1,9 +1,10 @@
 import React from "react";
 import { Paper } from "@mui/material";
-import NavbarLogout from "./NavbarLogout";
 import NavbarAvatar from "./NavbarAvatar";
 import NavbarSearch from "./NavbarSearch";
 import GlobalState from "../../helpers/globalState";
+import NavbarSettings from "./NavbarSettings";
+import NavbarNotifications from "./NavbarNotifications";
 
 interface NavbarProps {}
 
@@ -24,7 +25,8 @@ class Navbar extends React.Component<NavbarProps, NavbarState> {
             >
                 <NavbarSearch />
                 <NavbarAvatar />
-                <NavbarLogout />
+                <NavbarNotifications />
+                <NavbarSettings />
             </Paper>
         );
     }

@@ -1,16 +1,17 @@
 import { Avatar, IconButton } from "@mui/material";
 import React from "react";
 import GlobalState from "../../helpers/globalState";
+import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 
-export interface NavbarAvatarProps {}
+export interface NavbarNotificationsProps {}
 
-export interface NavbarAvatarState {}
+export interface NavbarNotificationsState {}
 
-class NavbarAvatar extends React.Component<
-    NavbarAvatarProps,
-    NavbarAvatarState
+class NavbarNotifications extends React.Component<
+    NavbarNotificationsProps,
+    NavbarNotificationsState
 > {
-    constructor(props: NavbarAvatarProps) {
+    constructor(props: NavbarNotificationsProps) {
         super(props);
     }
     render() {
@@ -21,14 +22,10 @@ class NavbarAvatar extends React.Component<
                     borderRadius: GlobalState.state.theme.shape.borderRadius,
                 }}
             >
-                <Avatar
-                    sx={{ width: 24, height: 24 }}
-                    alt="Avatar"
-                    src={GlobalState.state.data.avatar}
-                />
+                <NotificationsNoneOutlinedIcon />
             </IconButton>
         );
     }
 }
 
-export default NavbarAvatar;
+export default NavbarNotifications;

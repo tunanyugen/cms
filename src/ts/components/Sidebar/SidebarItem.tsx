@@ -39,9 +39,26 @@ class SidebarItem extends React.Component<SidebarItemProps, SidebarItemState> {
                         }
                     }}
                 >
-                    <ListItemIcon>{this.props.icon}</ListItemIcon>
+                    <ListItemIcon
+                        sx={{
+                            fontSize:
+                                GlobalState.state.theme.typography.fontSize,
+                        }}
+                    >
+                        {this.props.icon}
+                    </ListItemIcon>
                     <ListItemText
-                        primary={this.props.name}
+                        primary={
+                            <span
+                                style={{
+                                    fontSize:
+                                        GlobalState.state.theme.typography
+                                            .fontSize,
+                                }}
+                            >
+                                {this.props.name}
+                            </span>
+                        }
                     />
                     <ExpandLessOutlinedIcon
                         sx={{

@@ -19,6 +19,7 @@ class NavbarSearch extends React.Component<
             <TextField
                 size="small"
                 placeholder="Search..."
+                variant="standard"
                 InputProps={{
                     startAdornment: (
                         <InputAdornment position="start">
@@ -26,7 +27,7 @@ class NavbarSearch extends React.Component<
                         </InputAdornment>
                     ),
                     sx: {
-                        height: 28,
+                        height: 34,
                         fontSize: GlobalState.state.theme.typography.fontSize,
                     },
                 }}
