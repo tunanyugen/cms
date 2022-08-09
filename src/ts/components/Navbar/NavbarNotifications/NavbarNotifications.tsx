@@ -1,6 +1,6 @@
-import { Avatar, Box, ClickAwayListener, Grow, IconButton, Paper } from "@mui/material";
+import { Avatar, Badge, Box, ClickAwayListener, Grow, IconButton, Paper } from "@mui/material";
 import React from "react";
-import GlobalState from "../../helpers/globalState";
+import GlobalState from "../../../helpers/globalState";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import NavbarNotificationsNotification from "./NavbarNotificationsNotification";
 
@@ -40,7 +40,9 @@ class NavbarNotifications extends React.Component<NavbarNotificationsProps, Navb
                             borderRadius: GlobalState.state.theme.shape.borderRadius,
                         }}
                     >
-                        <NotificationsNoneOutlinedIcon />
+                        <Badge badgeContent={this.getUnseenNotificationCount()} color="error">
+                            <NotificationsNoneOutlinedIcon />
+                        </Badge>
                     </IconButton>
                     <Grow in={this.state.open} style={{ transformOrigin: "100% 0%" }}>
                         <Paper className="navbar__notifications__wrapper">{this.renderNotifications()}</Paper>
@@ -49,6 +51,15 @@ class NavbarNotifications extends React.Component<NavbarNotificationsProps, Navb
             </ClickAwayListener>
         );
     }
+    getUnseenNotificationCount = () => {
+        let count = 0;
+        GlobalState.state.data.notifications.forEach((notification) => {
+            if (!notification.seen) {
+                count++;
+            }
+        });
+        return count;
+    };
     renderNotifications = () => {
         return GlobalState.state.data.notifications.map((props) => {
             return <NavbarNotificationsNotification key={props.id} {...props} />;

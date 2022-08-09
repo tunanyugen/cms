@@ -1,6 +1,6 @@
 import { Box, Button, Divider } from "@mui/material";
 import * as React from "react";
-import GlobalState from "../../helpers/globalState";
+import GlobalState from "../../../helpers/globalState";
 
 export interface NavbarNotificationsNotificationProps {
     id: string;

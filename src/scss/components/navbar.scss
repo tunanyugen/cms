@@ -21,6 +21,9 @@
             display: flex;
             width: 100%;
             flex-direction: column;
+            &.seen {
+                backdrop-filter: brightness(0.8);
+            }
         }
     }
     &__settings {

@@ -6,8 +6,9 @@ import DataFetcher from "./dataFetchers/DataFetcher";
 import DefaultDataSidebarItem from "./dataFetchers/defaultData/DefaultDataSidebarItems";
 import DefaultDataAvatar from "./dataFetchers/defaultData/DefaultDataAvatar";
 import Apis from "../interfaces/Apis";
-import NavbarNotificationsNotification, { NavbarNotificationsNotificationProps } from "../components/Navbar/NavbarNotificationsNotification";
 import DefaultDataNotifications from "./dataFetchers/defaultData/DefaultDataNotifications";
+import { NavbarSettingsLanguageItemProps } from "../components/Navbar/NavbarSettings/NavbarSettingsLanguageItem";
+import { NavbarNotificationsNotificationProps } from "../components/Navbar/NavbarNotifications/NavbarNotificationsNotification";
 
 export interface GlobalStateProps {
     theme: Theme;
@@ -19,7 +20,9 @@ export interface GlobalStateProps {
     data: {
         avatar: string;
         sidebarItems: SidebarItemProps[];
-        notifications: NavbarNotificationsNotificationProps[]
+        notifications: NavbarNotificationsNotificationProps[];
+        languages: NavbarSettingsLanguageItemProps[];
+        translations: any;
     };
 }
 
@@ -35,6 +38,17 @@ export default class GlobalState {
             avatar: "",
             sidebarItems: [],
             notifications: [],
+            languages: [
+                {
+                    code: "vi",
+                    name: "Tiếng Việt",
+                },
+                {
+                    code: "en",
+                    name: "English",
+                },
+            ],
+            translations: {},
         },
     };
     public static get state() {
@@ -42,32 +56,39 @@ export default class GlobalState {
     }
     private static _subscriptions: { [key: string]: Function } = {};
     static initialize = (apis: Apis) => {
-        DataFetcher.fetch<SidebarItemProps[]>(
-            apis.sidebarItems,
-            new DefaultDataSidebarItem().getDefaultData()
-        ).then((result) => {
-            let clonedState = { ...GlobalState.state };
-            clonedState.data.sidebarItems = result.data.items;
-            GlobalState.setState(clonedState);
-        });
-        DataFetcher.fetch<string>(
-            apis.avatar,
-            new DefaultDataAvatar().getDefaultData()
-        ).then((result) => {
+        DataFetcher.fetch<SidebarItemProps[]>(apis.sidebarItems, new DefaultDataSidebarItem().getDefaultData()).then(
+            (result) => {
+                let clonedState = { ...GlobalState.state };
+                clonedState.data.sidebarItems = result.data.items;
+                GlobalState.setState(clonedState);
+            }
+        );
+        DataFetcher.fetch<string>(apis.avatar, new DefaultDataAvatar().getDefaultData()).then((result) => {
             let clonedState = { ...GlobalState.state };
             clonedState.data.avatar = result.data.items[0];
             GlobalState.setState(clonedState);
         });
-        DataFetcher.fetch<NavbarNotificationsNotificationProps[]>(apis.notifications, new DefaultDataNotifications().getDefaultData()).then((result) => {
+        DataFetcher.fetch<NavbarNotificationsNotificationProps[]>(
+            apis.notifications,
+            new DefaultDataNotifications().getDefaultData()
+        ).then((result) => {
             let clonedState = { ...GlobalState.state };
             clonedState.data.notifications = result.data.items;
             GlobalState.setState(clonedState);
-        })
+        });
     };
-    static setState = (
-        state: GlobalStateProps,
-        callback: (state: GlobalStateProps) => void = () => {}
-    ) => {
+    static translate = (sentence: string) => {
+        return GlobalState.state.data.translations[sentence]
+            ? GlobalState.state.data.translations[sentence]
+            : sentence
+                  .replace(/-_/giu, " ")
+                  .split(" ")
+                  .map((word) => {
+                      return word.charAt(0).toUpperCase() + word.slice(1);
+                  })
+                  .join(" ");
+    };
+    static setState = (state: GlobalStateProps, callback: (state: GlobalStateProps) => void = () => {}) => {
         GlobalState._state = { ...state };
         Object.entries(GlobalState._subscriptions).forEach((value, index) => {
             value[1]();
