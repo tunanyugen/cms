@@ -6,6 +6,7 @@ export default class DefaultDataNotifications extends DefaultData {
         return {
             items: [
                 {
+                    id: "0",
                     title: "Empty inbox",
                     body: "You do not have any notifications",
                     seen: false,

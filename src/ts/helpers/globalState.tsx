@@ -14,6 +14,7 @@ export interface GlobalStateProps {
     config: {
         sidebarX: number;
         navbarY: number;
+        drawerX: number;
     };
     data: {
         avatar: string;
@@ -26,8 +27,9 @@ export default class GlobalState {
     private static _state: GlobalStateProps = {
         theme: theme,
         config: {
-            sidebarX: 270,
+            sidebarX: 200,
             navbarY: 56,
+            drawerX: 200,
         },
         data: {
             avatar: "",

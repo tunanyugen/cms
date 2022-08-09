@@ -3,7 +3,7 @@ import { Paper } from "@mui/material";
 import NavbarAvatar from "./NavbarAvatar";
 import NavbarSearch from "./NavbarSearch";
 import GlobalState from "../../helpers/globalState";
-import NavbarSettings from "./NavbarSettings";
+import NavbarSettings from "./NavbarSettings/NavbarSettings";
 import NavbarNotifications from "./NavbarNotifications";
 
 interface NavbarProps {}

@@ -23,4 +23,13 @@
             flex-direction: column;
         }
     }
+    &__settings {
+        &__drawer {
+            &__wrapper {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+            }
+        }
+    }
 }

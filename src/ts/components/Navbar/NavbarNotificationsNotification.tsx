@@ -3,6 +3,7 @@ import * as React from "react";
 import GlobalState from "../../helpers/globalState";
 
 export interface NavbarNotificationsNotificationProps {
+    id: string;
     title: string;
     body: string;
     seen: boolean;
@@ -30,14 +31,26 @@ class NavbarNotificationsNotification extends React.Component<
                         color: "inherit",
                     }}
                 >
-                    <Box className="navbar__notifications__notification__title">
+                    <Box
+                        className="navbar__notifications__notification__title"
+                        sx={{
+                            color: GlobalState.state.theme.palette.primary.main,
+                            fontSize: GlobalState.state.theme.typography.h6,
+                        }}
+                    >
                         <span
                             dangerouslySetInnerHTML={{
                                 __html: this.props.title,
                             }}
                         ></span>
                     </Box>
-                    <Box className="navbar__notifications__notification__body">
+                    <Box
+                        className="navbar__notifications__notification__body"
+                        sx={{
+                            fontSize:
+                                GlobalState.state.theme.typography.fontSize,
+                        }}
+                    >
                         <span
                             dangerouslySetInnerHTML={{
                                 __html: this.props.body,

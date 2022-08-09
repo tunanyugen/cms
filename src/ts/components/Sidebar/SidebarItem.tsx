@@ -21,6 +21,12 @@ export interface SidebarItemState {
 }
 
 class SidebarItem extends React.Component<SidebarItemProps, SidebarItemState> {
+    get open() {
+        return this.state.open;
+    }
+    set open(value: boolean) {
+        this.setState({ open: value });
+    }
     constructor(props: SidebarItemProps) {
         super(props);
         this.state = {
@@ -35,7 +41,7 @@ class SidebarItem extends React.Component<SidebarItemProps, SidebarItemState> {
                     onClick={(e) => {
                         if (this.props.children.length > 0) {
                             e.preventDefault();
-                            this.setState({ open: !this.state.open });
+                            this.open = !this.open;
                         }
                     }}
                 >
