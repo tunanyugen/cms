@@ -1,6 +1,5 @@
 import DefaultData from "./DefaultData";
 import InboxIcon from "@mui/icons-material/Inbox";
-import { v4 as uuidv4 } from "uuid";
 import { SidebarItemProps } from "../../../components/Sidebar/SidebarItem";
 import GlobalState from "../../globalState";
 

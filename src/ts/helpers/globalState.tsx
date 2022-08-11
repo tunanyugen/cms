@@ -10,6 +10,15 @@ import DefaultDataNotifications from "./dataFetchers/defaultData/DefaultDataNoti
 import { NavbarSettingsLanguageItemProps } from "../components/Navbar/NavbarSettings/NavbarSettingsLanguageItem";
 import { NavbarNotificationsNotificationProps } from "../components/Navbar/NavbarNotifications/NavbarNotificationsNotification";
 
+export interface GlobalStateSubscriptionIndex {
+    attribute: string;
+    uuid: string;
+}
+export interface GlobalStateSubscription {
+    [attribute: string]: {
+        [uuid: string]: Function;
+    };
+}
 export interface GlobalStateProps {
     theme: Theme;
     config: {
@@ -54,29 +63,30 @@ export default class GlobalState {
     public static get state() {
         return { ...GlobalState._state };
     }
-    private static _subscriptions: { [key: string]: Function } = {};
+    private static _subscriptions: GlobalStateSubscription = {};
+    // fetches data from api then update states
     static initialize = (apis: Apis) => {
+        let clonedState = { ...GlobalState.state };
+        // fetch sidebar items
         DataFetcher.fetch<SidebarItemProps[]>(apis.sidebarItems, new DefaultDataSidebarItem().getDefaultData()).then(
             (result) => {
-                let clonedState = { ...GlobalState.state };
                 clonedState.data.sidebarItems = result.data.items;
-                GlobalState.setState(clonedState);
+                // fetch avatar
+                DataFetcher.fetch<string>(apis.avatar, new DefaultDataAvatar().getDefaultData()).then((result) => {
+                    clonedState.data.avatar = result.data.items[0];
+                    // fetch notifications
+                    DataFetcher.fetch<NavbarNotificationsNotificationProps[]>(
+                        apis.notifications,
+                        new DefaultDataNotifications().getDefaultData()
+                    ).then((result) => {
+                        clonedState.data.notifications = result.data.items;
+                        GlobalState.setState(clonedState);
+                    });
+                });
             }
         );
-        DataFetcher.fetch<string>(apis.avatar, new DefaultDataAvatar().getDefaultData()).then((result) => {
-            let clonedState = { ...GlobalState.state };
-            clonedState.data.avatar = result.data.items[0];
-            GlobalState.setState(clonedState);
-        });
-        DataFetcher.fetch<NavbarNotificationsNotificationProps[]>(
-            apis.notifications,
-            new DefaultDataNotifications().getDefaultData()
-        ).then((result) => {
-            let clonedState = { ...GlobalState.state };
-            clonedState.data.notifications = result.data.items;
-            GlobalState.setState(clonedState);
-        });
     };
+    // translates sentences fetched from state
     static translate = (sentence: string) => {
         return GlobalState.state.data.translations[sentence]
             ? GlobalState.state.data.translations[sentence]
@@ -88,19 +98,27 @@ export default class GlobalState {
                   })
                   .join(" ");
     };
+    // sets globalState states and run all subscription in attributes that are included in the new state
     static setState = (state: GlobalStateProps, callback: (state: GlobalStateProps) => void = () => {}) => {
         GlobalState._state = { ...state };
-        Object.entries(GlobalState._subscriptions).forEach((value, index) => {
-            value[1]();
+        Object.entries(state).forEach(([stateAttribute, callbacks]) => {
+            Object.entries(this._subscriptions[stateAttribute]).forEach(([callbackUuid, callback]) => {
+                this._subscriptions[stateAttribute][callbackUuid]();
+            });
         });
         callback(GlobalState.state);
     };
-    static subscribe = (callback: Function): string => {
-        let key = uuidv4();
-        GlobalState._subscriptions[key] = callback;
-        return key;
+    // subscribes to level 1 attribute of state
+    static subscribe = (attribute: string, callback: Function): GlobalStateSubscriptionIndex => {
+        let uuid = uuidv4();
+        if (!GlobalState._subscriptions[attribute]) {
+            GlobalState._subscriptions[attribute] = {};
+        }
+        GlobalState._subscriptions[attribute][uuid] = callback;
+        return { attribute, uuid };
     };
-    static unsubscribe = (key: string) => {
-        delete GlobalState._subscriptions[key];
+    // unsubscribes from level 1 attribute of state
+    static unsubscribe = (index: GlobalStateSubscriptionIndex) => {
+        delete GlobalState._subscriptions[index.attribute][index.uuid];
     };
 }

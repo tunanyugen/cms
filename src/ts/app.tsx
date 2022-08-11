@@ -2,9 +2,10 @@ import * as React from "react";
 import { Box, Paper } from "@mui/material";
 import Sidebar from "./components/Sidebar/Sidebar";
 import Navbar from "./components/Navbar/Navbar";
-import GlobalState from "./helpers/globalState";
+import GlobalState, { GlobalStateSubscriptionIndex as GlobalStateSubscriptionIndex } from "./helpers/globalState";
 import Calculator from "./helpers/calculator/Calculator";
 import { ThemeContext } from "..";
+import ArticlesForm from "./components/Form/ArticlesForm";
 
 export interface AppProps {}
 
@@ -13,12 +14,14 @@ export interface AppState {
 }
 
 class App extends React.Component<AppProps, AppState> {
-    private _subscriptionId: string;
+    private _subscriptionIndices: GlobalStateSubscriptionIndex[];
     static themeContext = ThemeContext;
     constructor(props: AppProps) {
         super(props);
-        this._subscriptionId = GlobalState.subscribe(() => {
-            this.forceUpdate();
+        this._subscriptionIndices = ["theme", "data", "config"].map((attribute) => {
+            return GlobalState.subscribe(attribute, () => {
+                this.forceUpdate();
+            });
         });
         window.addEventListener("resize", () => {
             this.forceUpdate();
@@ -57,7 +60,9 @@ class App extends React.Component<AppProps, AppState> {
                     >
                         <Navbar />
                     </Box>
-                    <Paper className="app__content-container"></Paper>
+                    <Paper className="app__content-container">
+                        <ArticlesForm parentArticleTitle="" title="" content="" />
+                    </Paper>
                 </Box>
             </Box>
         );

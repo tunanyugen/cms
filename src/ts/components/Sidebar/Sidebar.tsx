@@ -1,6 +1,6 @@
 import * as React from "react";
 import { List, Paper } from "@mui/material";
-import SidebarItem, { SidebarItemProps } from "./SidebarItem";
+import SidebarItem from "./SidebarItem";
 import GlobalState from "../../helpers/globalState";
 
 export interface SidebarProps {}
