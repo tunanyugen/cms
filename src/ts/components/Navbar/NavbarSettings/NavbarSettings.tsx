@@ -1,8 +1,9 @@
 import React from "react";
 import { ClickAwayListener, IconButton } from "@mui/material";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import GlobalState from "../../../helpers/globalState";
+import GlobalState, { GlobalStateAttributes } from "../../../helpers/globalState";
 import NavbarSettingsDrawer from "./NavbarSettingsDrawer";
+import Component from "../../../component";
 
 export interface NavbarSettingsProps {}
 
@@ -10,7 +11,7 @@ export interface NavbarSettingsState {
     open: boolean;
 }
 
-class NavbarSettings extends React.Component<NavbarSettingsProps, NavbarSettingsState> {
+class NavbarSettings extends Component<NavbarSettingsProps, NavbarSettingsState> {
     get open() {
         return this.state.open;
     }
@@ -19,6 +20,7 @@ class NavbarSettings extends React.Component<NavbarSettingsProps, NavbarSettings
     }
     constructor(props: NavbarSettingsProps) {
         super(props);
+        
         this.state = {
             open: false,
         };

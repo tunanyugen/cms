@@ -21,44 +21,51 @@ export interface GlobalStateSubscription {
 }
 export interface GlobalStateProps {
     theme: Theme;
-    config: {
-        sidebarX: number;
-        navbarY: number;
-        drawerX: number;
-    };
-    data: {
-        avatar: string;
-        sidebarItems: SidebarItemProps[];
-        notifications: NavbarNotificationsNotificationProps[];
-        languages: NavbarSettingsLanguageItemProps[];
-        translations: any;
-    };
+    // config
+    sidebarX: number;
+    navbarY: number;
+    drawerX: number;
+    // data
+    avatar: string;
+    sidebarItems: SidebarItemProps[];
+    notifications: NavbarNotificationsNotificationProps[];
+    languages: NavbarSettingsLanguageItemProps[];
+    translations: any;
+}
+export enum GlobalStateAttributes {
+    theme = "theme",
+    sidebarX = "sidebarX",
+    navbarY = "navbarY",
+    drawerX = "drawerX",
+    avatar = "avatar",
+    sidebarItems = "sidebarItems",
+    notifications = "notifications",
+    languages = "languages",
+    translations = "translations",
 }
 
 export default class GlobalState {
     private static _state: GlobalStateProps = {
         theme: theme,
-        config: {
-            sidebarX: 200,
-            navbarY: 56,
-            drawerX: 200,
-        },
-        data: {
-            avatar: "",
-            sidebarItems: [],
-            notifications: [],
-            languages: [
-                {
-                    code: "vi",
-                    name: "Tiếng Việt",
-                },
-                {
-                    code: "en",
-                    name: "English",
-                },
-            ],
-            translations: {},
-        },
+        // config
+        sidebarX: 200,
+        navbarY: 56,
+        drawerX: 200,
+        // data
+        avatar: "",
+        sidebarItems: [],
+        notifications: [],
+        languages: [
+            {
+                code: "vi",
+                name: "Tiếng Việt",
+            },
+            {
+                code: "en",
+                name: "English",
+            },
+        ],
+        translations: {},
     };
     public static get state() {
         return { ...GlobalState._state };
@@ -70,16 +77,16 @@ export default class GlobalState {
         // fetch sidebar items
         DataFetcher.fetch<SidebarItemProps[]>(apis.sidebarItems, new DefaultDataSidebarItem().getDefaultData()).then(
             (result) => {
-                clonedState.data.sidebarItems = result.data.items;
+                clonedState.sidebarItems = result.data.items;
                 // fetch avatar
                 DataFetcher.fetch<string>(apis.avatar, new DefaultDataAvatar().getDefaultData()).then((result) => {
-                    clonedState.data.avatar = result.data.items[0];
+                    clonedState.avatar = result.data.items[0];
                     // fetch notifications
                     DataFetcher.fetch<NavbarNotificationsNotificationProps[]>(
                         apis.notifications,
                         new DefaultDataNotifications().getDefaultData()
                     ).then((result) => {
-                        clonedState.data.notifications = result.data.items;
+                        clonedState.notifications = result.data.items;
                         GlobalState.setState(clonedState);
                     });
                 });
@@ -88,10 +95,10 @@ export default class GlobalState {
     };
     // translates sentences fetched from state
     static translate = (sentence: string) => {
-        return GlobalState.state.data.translations[sentence]
-            ? GlobalState.state.data.translations[sentence]
+        return GlobalState.state.translations[sentence]
+            ? GlobalState.state.translations[sentence]
             : sentence
-                  .replace(/-_/giu, " ")
+                  .replace(/[-_]/giu, " ")
                   .split(" ")
                   .map((word) => {
                       return word.charAt(0).toUpperCase() + word.slice(1);
@@ -102,9 +109,15 @@ export default class GlobalState {
     static setState = (state: GlobalStateProps, callback: (state: GlobalStateProps) => void = () => {}) => {
         GlobalState._state = { ...state };
         Object.entries(state).forEach(([stateAttribute, callbacks]) => {
-            Object.entries(this._subscriptions[stateAttribute]).forEach(([callbackUuid, callback]) => {
-                this._subscriptions[stateAttribute][callbackUuid]();
-            });
+            if (!this._subscriptions[stateAttribute]) {
+                console.warn(
+                    `Attribute "${stateAttribute}" was updated but no subscription was assigned to this attribute`
+                );
+            } else {
+                Object.entries(this._subscriptions[stateAttribute]).forEach(([callbackUuid, callback]) => {
+                    this._subscriptions[stateAttribute][callbackUuid]();
+                });
+            }
         });
         callback(GlobalState.state);
     };
@@ -116,6 +129,12 @@ export default class GlobalState {
         }
         GlobalState._subscriptions[attribute][uuid] = callback;
         return { attribute, uuid };
+    };
+    // subscribes the same callback to multiple attributes
+    static bulkSubscribe = (attributes: string[], callback: Function): GlobalStateSubscriptionIndex[] => {
+        return attributes.map((attribute) => {
+            return GlobalState.subscribe(attribute, callback);
+        });
     };
     // unsubscribes from level 1 attribute of state
     static unsubscribe = (index: GlobalStateSubscriptionIndex) => {

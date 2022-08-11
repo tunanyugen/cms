@@ -1,9 +1,10 @@
 import React from "react";
 import { Divider, Drawer, Paper, Typography } from "@mui/material";
-import GlobalState from "../../../helpers/globalState";
+import GlobalState, { GlobalStateAttributes } from "../../../helpers/globalState";
 import NavbarSettingsMode from "./NavbarSettingsMode";
 import NavbarSettingsLanguage from "./NavbarSettingsLanguage";
 import NavbarSettingsLogout from "./NavbarSettingsLogout";
+import Component from "../../../component";
 
 export interface NavbarSettingsDrawerProps {
     open: boolean;
@@ -12,9 +13,15 @@ export interface NavbarSettingsDrawerProps {
 
 export interface NavbarSettingsDrawerState {}
 
-class NavbarSettingsDrawer extends React.Component<NavbarSettingsDrawerProps, NavbarSettingsDrawerState> {
+class NavbarSettingsDrawer extends Component<NavbarSettingsDrawerProps, NavbarSettingsDrawerState> {
     constructor(props: NavbarSettingsDrawerProps) {
         super(props);
+        this._subscriptionIndices = GlobalState.bulkSubscribe(
+            [GlobalStateAttributes.drawerX],
+            () => {
+                this.forceUpdate();
+            }
+        );
     }
     render() {
         return (
@@ -34,7 +41,7 @@ class NavbarSettingsDrawer extends React.Component<NavbarSettingsDrawerProps, Na
                     className="navbar__settings__drawer__wrapper"
                     sx={{
                         gap: `calc(${GlobalState.state.theme.spacing()} * 2)`,
-                        width: GlobalState.state.config.drawerX,
+                        width: GlobalState.state.drawerX,
                         padding: GlobalState.state.theme.spacing(),
                     }}
                 >

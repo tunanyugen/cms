@@ -1,8 +1,8 @@
 import { Button, FormControl, TextField } from "@mui/material";
-import React from "react";
-import GlobalState from "../../helpers/globalState";
+import GlobalState, { GlobalStateAttributes } from "../../helpers/globalState";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import Component from "../../component";
 
 export interface ArticlesFormProps extends ArticlesFormState {}
 
@@ -12,9 +12,10 @@ export interface ArticlesFormState {
     content: string;
 }
 
-class ArticlesForm extends React.Component<ArticlesFormProps, ArticlesFormState> {
+class ArticlesForm extends Component<ArticlesFormProps, ArticlesFormState> {
     constructor(props: ArticlesFormProps) {
         super(props);
+        
         this.state = {
             parentArticleTitle: this.props.parentArticleTitle,
             title: this.props.title,
@@ -26,7 +27,10 @@ class ArticlesForm extends React.Component<ArticlesFormProps, ArticlesFormState>
             <FormControl
                 className="form"
                 fullWidth
-                sx={{ padding: GlobalState.state.theme.spacing(), gap: GlobalState.state.theme.spacing() }}
+                sx={{
+                    padding: GlobalState.state.theme.spacing(),
+                    gap: GlobalState.state.theme.spacing(),
+                }}
             >
                 <TextField
                     fullWidth

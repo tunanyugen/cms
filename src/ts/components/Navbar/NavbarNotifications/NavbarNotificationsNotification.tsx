@@ -1,6 +1,6 @@
 import { Box, Button, Divider } from "@mui/material";
-import * as React from "react";
-import GlobalState from "../../../helpers/globalState";
+import Component from "../../../component";
+import GlobalState, { GlobalStateAttributes } from "../../../helpers/globalState";
 
 export interface NavbarNotificationsNotificationProps {
     id: string;
@@ -11,12 +11,13 @@ export interface NavbarNotificationsNotificationProps {
 
 export interface NavbarNotificationsNotificationState {}
 
-class NavbarNotificationsNotification extends React.Component<
+class NavbarNotificationsNotification extends Component<
     NavbarNotificationsNotificationProps,
     NavbarNotificationsNotificationState
 > {
     constructor(props: NavbarNotificationsNotificationProps) {
         super(props);
+        
     }
     render() {
         return (

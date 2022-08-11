@@ -1,14 +1,15 @@
 import { Button, ButtonGroup, FormControl, FormLabel } from "@mui/material";
-import * as React from "react";
-import GlobalState from "../../../helpers/globalState";
+import Component from "../../../component";
+import GlobalState, { GlobalStateAttributes } from "../../../helpers/globalState";
 
 export interface NavbarSettingsModeProps {}
 
 export interface NavbarSettingsModeState {}
 
-class NavbarSettingsMode extends React.Component<NavbarSettingsModeProps, NavbarSettingsModeState> {
+class NavbarSettingsMode extends Component<NavbarSettingsModeProps, NavbarSettingsModeState> {
     constructor(props: NavbarSettingsModeProps) {
         super(props);
+        
     }
     render() {
         return (

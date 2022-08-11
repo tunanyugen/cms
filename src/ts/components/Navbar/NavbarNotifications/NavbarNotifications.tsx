@@ -1,8 +1,9 @@
 import { Avatar, Badge, Box, ClickAwayListener, Grow, IconButton, Paper } from "@mui/material";
 import React from "react";
-import GlobalState from "../../../helpers/globalState";
+import GlobalState, { GlobalStateAttributes } from "../../../helpers/globalState";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import NavbarNotificationsNotification from "./NavbarNotificationsNotification";
+import Component from "../../../component";
 
 export interface NavbarNotificationsProps {}
 
@@ -10,7 +11,7 @@ export interface NavbarNotificationsState {
     open: boolean;
 }
 
-class NavbarNotifications extends React.Component<NavbarNotificationsProps, NavbarNotificationsState> {
+class NavbarNotifications extends Component<NavbarNotificationsProps, NavbarNotificationsState> {
     get open() {
         return this.state.open;
     }
@@ -19,6 +20,12 @@ class NavbarNotifications extends React.Component<NavbarNotificationsProps, Navb
     }
     constructor(props: NavbarNotificationsProps) {
         super(props);
+        this._subscriptionIndices = GlobalState.bulkSubscribe(
+            [GlobalStateAttributes.notifications],
+            () => {
+                this.forceUpdate();
+            }
+        );
         this.state = {
             open: false,
         };
@@ -53,7 +60,7 @@ class NavbarNotifications extends React.Component<NavbarNotificationsProps, Navb
     }
     getUnseenNotificationCount = () => {
         let count = 0;
-        GlobalState.state.data.notifications.forEach((notification) => {
+        GlobalState.state.notifications.forEach((notification) => {
             if (!notification.seen) {
                 count++;
             }
@@ -61,7 +68,7 @@ class NavbarNotifications extends React.Component<NavbarNotificationsProps, Navb
         return count;
     };
     renderNotifications = () => {
-        return GlobalState.state.data.notifications.map((props) => {
+        return GlobalState.state.notifications.map((props) => {
             return <NavbarNotificationsNotification key={props.id} {...props} />;
         });
     };

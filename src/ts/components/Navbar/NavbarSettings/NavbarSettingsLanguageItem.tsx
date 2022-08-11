@@ -1,6 +1,7 @@
 import { ListItem, ListItemButton, ListItemText } from "@mui/material";
 import React from "react";
-import GlobalState from "../../../helpers/globalState";
+import Component from "../../../component";
+import GlobalState, { GlobalStateAttributes } from "../../../helpers/globalState";
 
 export interface NavbarSettingsLanguageItemProps {
     code: string;
@@ -9,12 +10,10 @@ export interface NavbarSettingsLanguageItemProps {
 
 export interface NavbarSettingsLanguageItemState {}
 
-class NavbarSettingsLanguageItem extends React.Component<
-    NavbarSettingsLanguageItemProps,
-    NavbarSettingsLanguageItemState
-> {
+class NavbarSettingsLanguageItem extends Component<NavbarSettingsLanguageItemProps, NavbarSettingsLanguageItemState> {
     constructor(props: NavbarSettingsLanguageItemProps) {
         super(props);
+        
     }
     render() {
         return (
@@ -22,7 +21,9 @@ class NavbarSettingsLanguageItem extends React.Component<
                 <ListItemButton>
                     <ListItemText
                         primary={
-                            <span style={{ fontSize: GlobalState.state.theme.typography.fontSize }}>{this.props.name}</span>
+                            <span style={{ fontSize: GlobalState.state.theme.typography.fontSize }}>
+                                {this.props.name}
+                            </span>
                         }
                     />
                 </ListItemButton>

@@ -1,18 +1,19 @@
-import React from "react";
 import { Paper } from "@mui/material";
 import NavbarAvatar from "./NavbarAvatar";
 import NavbarSearch from "./NavbarSearch";
-import GlobalState from "../../helpers/globalState";
+import GlobalState, { GlobalStateAttributes } from "../../helpers/globalState";
 import NavbarSettings from "./NavbarSettings/NavbarSettings";
 import NavbarNotifications from "./NavbarNotifications/NavbarNotifications";
+import Component from "../../component";
 
 interface NavbarProps {}
 
 interface NavbarState {}
 
-class Navbar extends React.Component<NavbarProps, NavbarState> {
+class Navbar extends Component<NavbarProps, NavbarState> {
     constructor(props: NavbarProps) {
         super(props);
+        
     }
     render() {
         return (

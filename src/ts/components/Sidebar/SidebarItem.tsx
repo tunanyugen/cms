@@ -1,4 +1,3 @@
-import * as React from "react";
 import {
     Box,
     Collapse,
@@ -7,7 +6,8 @@ import {
     ListItemText,
 } from "@mui/material";
 import ExpandLessOutlinedIcon from "@mui/icons-material/ExpandLessOutlined";
-import GlobalState from "../../helpers/globalState";
+import GlobalState, { GlobalStateAttributes } from "../../helpers/globalState";
+import Component from "../../component";
 
 export interface SidebarItemProps {
     id: string;
@@ -20,7 +20,7 @@ export interface SidebarItemState {
     open: boolean;
 }
 
-class SidebarItem extends React.Component<SidebarItemProps, SidebarItemState> {
+class SidebarItem extends Component<SidebarItemProps, SidebarItemState> {
     get open() {
         return this.state.open;
     }
@@ -29,6 +29,7 @@ class SidebarItem extends React.Component<SidebarItemProps, SidebarItemState> {
     }
     constructor(props: SidebarItemProps) {
         super(props);
+        
         this.state = {
             open: false,
         };

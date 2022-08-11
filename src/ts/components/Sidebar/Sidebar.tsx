@@ -1,15 +1,18 @@
-import * as React from "react";
 import { List, Paper } from "@mui/material";
 import SidebarItem from "./SidebarItem";
-import GlobalState from "../../helpers/globalState";
+import GlobalState, { GlobalStateAttributes } from "../../helpers/globalState";
+import Component from "../../component";
 
 export interface SidebarProps {}
 
 export interface SidebarState {}
 
-class Sidebar extends React.Component<SidebarProps, SidebarState> {
+class Sidebar extends Component<SidebarProps, SidebarState> {
     constructor(props: SidebarProps) {
         super(props);
+        this._subscriptionIndices = GlobalState.bulkSubscribe([GlobalStateAttributes.sidebarItems], () => {
+            this.forceUpdate();
+        });
     }
     render() {
         return (
@@ -19,7 +22,7 @@ class Sidebar extends React.Component<SidebarProps, SidebarState> {
         );
     }
     renderItems = () => {
-        return GlobalState.state.data.sidebarItems.map((item) => {
+        return GlobalState.state.sidebarItems.map((item) => {
             return <SidebarItem key={item.id} {...item} />;
         });
     };

@@ -1,6 +1,7 @@
 .form {
     display: flex;
     flex-direction: column;
+    max-width: 615px;
 
     .ql-editor {
         height: 50vh;

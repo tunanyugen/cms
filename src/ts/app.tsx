@@ -1,11 +1,14 @@
-import * as React from "react";
 import { Box, Paper } from "@mui/material";
 import Sidebar from "./components/Sidebar/Sidebar";
 import Navbar from "./components/Navbar/Navbar";
-import GlobalState, { GlobalStateSubscriptionIndex as GlobalStateSubscriptionIndex } from "./helpers/globalState";
+import GlobalState, {
+    GlobalStateAttributes,
+    GlobalStateSubscriptionIndex as GlobalStateSubscriptionIndex,
+} from "./helpers/globalState";
 import Calculator from "./helpers/calculator/Calculator";
 import { ThemeContext } from "..";
 import ArticlesForm from "./components/Form/ArticlesForm";
+import Component from "./component";
 
 export interface AppProps {}
 
@@ -13,16 +16,16 @@ export interface AppState {
     renderLoopCount: number;
 }
 
-class App extends React.Component<AppProps, AppState> {
-    private _subscriptionIndices: GlobalStateSubscriptionIndex[];
+class App extends Component<AppProps, AppState> {
     static themeContext = ThemeContext;
     constructor(props: AppProps) {
         super(props);
-        this._subscriptionIndices = ["theme", "data", "config"].map((attribute) => {
-            return GlobalState.subscribe(attribute, () => {
+        this._subscriptionIndices = GlobalState.bulkSubscribe(
+            [GlobalStateAttributes.theme, GlobalStateAttributes.languages],
+            () => {
                 this.forceUpdate();
-            });
-        });
+            }
+        );
         window.addEventListener("resize", () => {
             this.forceUpdate();
         });
@@ -39,7 +42,7 @@ class App extends React.Component<AppProps, AppState> {
                     <Box
                         className="app__sidebar-container"
                         sx={{
-                            width: GlobalState.state.config.sidebarX,
+                            width: GlobalState.state.sidebarX,
                         }}
                     >
                         <Sidebar />
@@ -55,7 +58,7 @@ class App extends React.Component<AppProps, AppState> {
                     <Box
                         className="app__navbar-container"
                         sx={{
-                            flex: `0 0 ${GlobalState.state.config.navbarY}px`,
+                            flex: `0 0 ${GlobalState.state.navbarY}px`,
                         }}
                     >
                         <Navbar />

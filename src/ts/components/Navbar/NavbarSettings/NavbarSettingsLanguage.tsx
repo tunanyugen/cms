@@ -1,15 +1,22 @@
 import React from "react";
 import { Box, Divider, FormControl, FormLabel, List } from "@mui/material";
-import GlobalState from "../../../helpers/globalState";
+import GlobalState, { GlobalStateAttributes } from "../../../helpers/globalState";
 import NavbarSettingsLanguageItem from "./NavbarSettingsLanguageItem";
+import Component from "../../../component";
 
 export interface NavbarSettingsLanguageProps {}
 
 export interface NavbarSettingsLanguageState {}
 
-class NavbarSettingsLanguage extends React.Component<NavbarSettingsLanguageProps, NavbarSettingsLanguageState> {
+class NavbarSettingsLanguage extends Component<NavbarSettingsLanguageProps, NavbarSettingsLanguageState> {
     constructor(props: NavbarSettingsLanguageProps) {
         super(props);
+        this._subscriptionIndices = GlobalState.bulkSubscribe(
+            [GlobalStateAttributes.languages],
+            () => {
+                this.forceUpdate();
+            }
+        );
     }
     render() {
         return (
@@ -34,12 +41,12 @@ class NavbarSettingsLanguage extends React.Component<NavbarSettingsLanguageProps
         );
     }
     renderItems = () => {
-        return GlobalState.state.data.languages.map((language, index) => {
+        return GlobalState.state.languages.map((language, index) => {
             return (
                 <Box key={language.code}>
                     <NavbarSettingsLanguageItem {...language} />
                     {(() => {
-                        return index + 1 < GlobalState.state.data.languages.length ? <Divider /> : null;
+                        return index + 1 < GlobalState.state.languages.length ? <Divider /> : null;
                     })()}
                 </Box>
             );
