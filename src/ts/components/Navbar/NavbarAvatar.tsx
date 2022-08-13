@@ -10,12 +10,11 @@ export interface NavbarAvatarState {}
 class NavbarAvatar extends Component<NavbarAvatarProps, NavbarAvatarState> {
     constructor(props: NavbarAvatarProps) {
         super(props);
-        this._subscriptionIndices = GlobalState.bulkSubscribe(
-            [GlobalStateAttributes.avatar],
-            () => {
+        this._subscriptionIndices = GlobalState.bulkSubscribe([GlobalStateAttributes.avatar], () => {
+            if (this._mounted){
                 this.forceUpdate();
             }
-        );
+        });
     }
     render() {
         return (

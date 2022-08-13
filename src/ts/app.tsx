@@ -1,14 +1,12 @@
 import { Box, Paper } from "@mui/material";
 import Sidebar from "./components/Sidebar/Sidebar";
 import Navbar from "./components/Navbar/Navbar";
-import GlobalState, {
-    GlobalStateAttributes,
-    GlobalStateSubscriptionIndex as GlobalStateSubscriptionIndex,
-} from "./helpers/globalState";
+import GlobalState, { GlobalStateAttributes } from "./helpers/globalState";
 import Calculator from "./helpers/calculator/Calculator";
 import { ThemeContext } from "..";
-import ArticlesForm from "./components/Form/ArticlesForm";
+import ArticleForm from "./components/Form/ArticleForm";
 import Component from "./component";
+import { Routes, Route } from "react-router-dom";
 
 export interface AppProps {}
 
@@ -21,9 +19,16 @@ class App extends Component<AppProps, AppState> {
     constructor(props: AppProps) {
         super(props);
         this._subscriptionIndices = GlobalState.bulkSubscribe(
-            [GlobalStateAttributes.theme, GlobalStateAttributes.languages],
+            [
+                GlobalStateAttributes.theme,
+                GlobalStateAttributes.languages,
+                GlobalStateAttributes.sidebarX,
+                GlobalStateAttributes.navbarY,
+            ],
             () => {
-                this.forceUpdate();
+                if (this._mounted) {
+                    this.forceUpdate();
+                }
             }
         );
         window.addEventListener("resize", () => {
@@ -64,7 +69,9 @@ class App extends Component<AppProps, AppState> {
                         <Navbar />
                     </Box>
                     <Paper className="app__content-container">
-                        <ArticlesForm parentArticleTitle="" title="" content="" />
+                        <Routes>
+                            <Route path="*" element={<ArticleForm id="" parentArticleTitle="" title="" content="" />} />
+                        </Routes>
                     </Paper>
                 </Box>
             </Box>

@@ -13,7 +13,6 @@ interface NavbarState {}
 class Navbar extends Component<NavbarProps, NavbarState> {
     constructor(props: NavbarProps) {
         super(props);
-        
     }
     render() {
         return (

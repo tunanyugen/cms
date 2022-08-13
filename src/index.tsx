@@ -6,6 +6,7 @@ import GlobalState from "./ts/helpers/globalState";
 import { Theme } from "@mui/material";
 import Apis from "./ts/interfaces/Apis";
 import App from "./ts/app";
+import { BrowserRouter } from "react-router-dom";
 
 export interface ApiResponse<T> {
     items: T;
@@ -23,4 +24,10 @@ const root = ReactDOM.createRoot(document.querySelector("#root"));
 
 export const ThemeContext = React.createContext<Theme>(theme);
 
-root.render(<App />);
+root.render(
+    <React.StrictMode>
+        <BrowserRouter>
+            <App />
+        </BrowserRouter>
+    </React.StrictMode>
+);

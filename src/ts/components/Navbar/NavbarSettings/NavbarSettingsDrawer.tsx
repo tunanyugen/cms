@@ -16,12 +16,11 @@ export interface NavbarSettingsDrawerState {}
 class NavbarSettingsDrawer extends Component<NavbarSettingsDrawerProps, NavbarSettingsDrawerState> {
     constructor(props: NavbarSettingsDrawerProps) {
         super(props);
-        this._subscriptionIndices = GlobalState.bulkSubscribe(
-            [GlobalStateAttributes.drawerX],
-            () => {
+        this._subscriptionIndices = GlobalState.bulkSubscribe([GlobalStateAttributes.drawerX], () => {
+            if (this._mounted){
                 this.forceUpdate();
             }
-        );
+        });
     }
     render() {
         return (

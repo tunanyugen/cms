@@ -20,12 +20,11 @@ class NavbarNotifications extends Component<NavbarNotificationsProps, NavbarNoti
     }
     constructor(props: NavbarNotificationsProps) {
         super(props);
-        this._subscriptionIndices = GlobalState.bulkSubscribe(
-            [GlobalStateAttributes.notifications],
-            () => {
+        this._subscriptionIndices = GlobalState.bulkSubscribe([GlobalStateAttributes.notifications], () => {
+            if (this._mounted){
                 this.forceUpdate();
             }
-        );
+        });
         this.state = {
             open: false,
         };

@@ -31,6 +31,7 @@ export interface GlobalStateProps {
     notifications: NavbarNotificationsNotificationProps[];
     languages: NavbarSettingsLanguageItemProps[];
     translations: any;
+    history: string[];
 }
 export enum GlobalStateAttributes {
     theme = "theme",
@@ -42,10 +43,11 @@ export enum GlobalStateAttributes {
     notifications = "notifications",
     languages = "languages",
     translations = "translations",
+    history = "history",
 }
 
 export default class GlobalState {
-    private static _state: GlobalStateProps = {
+    private static _defaultState: GlobalStateProps = {
         theme: theme,
         // config
         sidebarX: 200,
@@ -66,14 +68,19 @@ export default class GlobalState {
             },
         ],
         translations: {},
-    };
+        history: [],
+    }
+    private static _state: GlobalStateProps = GlobalState._defaultState;
     public static get state() {
         return { ...GlobalState._state };
     }
     private static _subscriptions: GlobalStateSubscription = {};
     // fetches data from api then update states
     static initialize = (apis: Apis) => {
-        let clonedState = { ...GlobalState.state };
+        let clonedState:Partial<GlobalStateProps> = {};
+        // add current path to history array
+        clonedState.history = [...GlobalState._defaultState.history];
+        clonedState.history.push(window.location.pathname);
         // fetch sidebar items
         DataFetcher.fetch<SidebarItemProps[]>(apis.sidebarItems, new DefaultDataSidebarItem().getDefaultData()).then(
             (result) => {
@@ -106,9 +113,17 @@ export default class GlobalState {
                   .join(" ");
     };
     // sets globalState states and run all subscription in attributes that are included in the new state
-    static setState = (state: GlobalStateProps, callback: (state: GlobalStateProps) => void = () => {}) => {
-        GlobalState._state = { ...state };
-        Object.entries(state).forEach(([stateAttribute, callbacks]) => {
+    static setState = (state: Partial<GlobalStateProps>, callback: (state: GlobalStateProps) => void = () => {}) => {
+        let clonedState = GlobalState.state;
+        // only updating attributes that exist in state parameter
+        Object.entries(state).forEach(([stateAttribute, value]) => {
+            // @ts-ignore
+            clonedState[stateAttribute] = value;
+        })
+        // updating _state
+        GlobalState._state = clonedState;
+        // executing callbacks of attributes that exist in state parameter
+        Object.entries(state).forEach(([stateAttribute, value]) => {
             if (!this._subscriptions[stateAttribute]) {
                 console.warn(
                     `Attribute "${stateAttribute}" was updated but no subscription was assigned to this attribute`
@@ -119,6 +134,7 @@ export default class GlobalState {
                 });
             }
         });
+        // executing setState callback parameter
         callback(GlobalState.state);
     };
     // subscribes to level 1 attribute of state

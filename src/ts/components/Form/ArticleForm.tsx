@@ -1,22 +1,23 @@
 import { Button, FormControl, TextField } from "@mui/material";
-import GlobalState, { GlobalStateAttributes } from "../../helpers/globalState";
+import GlobalState from "../../helpers/globalState";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Component from "../../component";
 
-export interface ArticlesFormProps extends ArticlesFormState {}
+export interface ArticleFormProps extends ArticleFormState {}
 
-export interface ArticlesFormState {
+export interface ArticleFormState {
+    id: string;
     parentArticleTitle: string;
     title: string;
     content: string;
 }
 
-class ArticlesForm extends Component<ArticlesFormProps, ArticlesFormState> {
-    constructor(props: ArticlesFormProps) {
+class ArticleForm extends Component<ArticleFormProps, ArticleFormState> {
+    constructor(props: ArticleFormProps) {
         super(props);
-        
         this.state = {
+            id: this.props.id,
             parentArticleTitle: this.props.parentArticleTitle,
             title: this.props.title,
             content: this.props.content,
@@ -65,4 +66,4 @@ class ArticlesForm extends Component<ArticlesFormProps, ArticlesFormState> {
     }
 }
 
-export default ArticlesForm;
+export default ArticleForm;

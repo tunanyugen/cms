@@ -11,12 +11,11 @@ export interface NavbarSettingsLanguageState {}
 class NavbarSettingsLanguage extends Component<NavbarSettingsLanguageProps, NavbarSettingsLanguageState> {
     constructor(props: NavbarSettingsLanguageProps) {
         super(props);
-        this._subscriptionIndices = GlobalState.bulkSubscribe(
-            [GlobalStateAttributes.languages],
-            () => {
+        this._subscriptionIndices = GlobalState.bulkSubscribe([GlobalStateAttributes.languages], () => {
+            if (this._mounted){
                 this.forceUpdate();
             }
-        );
+        });
     }
     render() {
         return (
