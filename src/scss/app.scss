@@ -1,6 +1,8 @@
 @import "./components/navbar.scss";
 @import "./components/sidebar.scss";
 @import "./components/form.scss";
+@import "./components/routing.scss";
+@import "./components/gallery.scss";
 
 .app {
     display: flex;
@@ -17,17 +19,17 @@
     }
     &__sidebar-container {
         height: 100%;
-        transition: .25s;
+        transition: 0.25s;
     }
     &__navbar-container {
         position: sticky;
         top: 0;
         width: 100%;
         z-index: 99;
-        transition: .25s;
+        transition: 0.25s;
     }
     &__content-container {
         flex: 1;
-        transition: .25s;
+        transition: 0.25s;
     }
 }

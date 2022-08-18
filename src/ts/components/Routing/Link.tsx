@@ -11,13 +11,16 @@ class Link extends Component<LinkProps, LinkState> {
         super(props);
     }
     render() {
-        return <RouterLink onClick={this.updateHistory} {...this.props} />;
+        return <RouterLink className="routing__link" onClick={this.updateHistory} {...this.props} />;
     }
     updateHistory = () => {
+        if (this.props.to.toString().length <= 0) {
+            return;
+        }
         let clonedHistory = GlobalState.state.history;
         clonedHistory.push(this.props.to.toString());
-        GlobalState.setState({history: clonedHistory});
-    }
+        GlobalState.setState({ history: clonedHistory });
+    };
 }
 
 export default Link;

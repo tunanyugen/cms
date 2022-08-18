@@ -17,7 +17,6 @@ const apis: Apis = {
     avatar: null,
     notifications: null,
 };
-GlobalState.initialize(apis);
 (window as any).GlobalState = GlobalState;
 
 const root = ReactDOM.createRoot(document.querySelector("#root"));
@@ -31,3 +30,4 @@ root.render(
         </BrowserRouter>
     </React.StrictMode>
 );
+GlobalState.initialize(apis);

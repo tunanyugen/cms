@@ -69,7 +69,7 @@ export default class GlobalState {
         ],
         translations: {},
         history: [],
-    }
+    };
     private static _state: GlobalStateProps = GlobalState._defaultState;
     public static get state() {
         return { ...GlobalState._state };
@@ -77,7 +77,7 @@ export default class GlobalState {
     private static _subscriptions: GlobalStateSubscription = {};
     // fetches data from api then update states
     static initialize = (apis: Apis) => {
-        let clonedState:Partial<GlobalStateProps> = {};
+        let clonedState: Partial<GlobalStateProps> = {};
         // add current path to history array
         clonedState.history = [...GlobalState._defaultState.history];
         clonedState.history.push(window.location.pathname);
@@ -119,7 +119,7 @@ export default class GlobalState {
         Object.entries(state).forEach(([stateAttribute, value]) => {
             // @ts-ignore
             clonedState[stateAttribute] = value;
-        })
+        });
         // updating _state
         GlobalState._state = clonedState;
         // executing callbacks of attributes that exist in state parameter

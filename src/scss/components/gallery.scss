@@ -1,0 +1,19 @@
+.gallery {
+    &__image {
+        &__edit {
+            top: 0;
+            right: 0;
+        }
+        &__modal {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            &__wrapper {
+                display: flex;
+                flex-direction: column;
+                width: 500px;
+                height: 420px;
+            }
+        }
+    }
+}

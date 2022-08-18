@@ -1,19 +1,18 @@
-import { Button, FormControl, TextField } from "@mui/material";
+import { Button, Fade, FormControl, TextField } from "@mui/material";
 import GlobalState from "../../helpers/globalState";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import Component from "../../component";
+import Form, { FormState } from "./Form";
 
 export interface ArticleFormProps extends ArticleFormState {}
 
-export interface ArticleFormState {
-    id: string;
+export interface ArticleFormState extends FormState{
     parentArticleTitle: string;
     title: string;
     content: string;
 }
 
-class ArticleForm extends Component<ArticleFormProps, ArticleFormState> {
+class ArticleForm extends Form<ArticleFormProps, ArticleFormState> {
     constructor(props: ArticleFormProps) {
         super(props);
         this.state = {
@@ -23,7 +22,7 @@ class ArticleForm extends Component<ArticleFormProps, ArticleFormState> {
             content: this.props.content,
         };
     }
-    render() {
+    renderForm = () => {
         return (
             <FormControl
                 className="form"

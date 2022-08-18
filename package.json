@@ -8,7 +8,8 @@
     "build": "webpack --mode=production --node-env=production",
     "build:dev": "webpack --mode=development",
     "build:prod": "webpack --mode=production --node-env=production",
-    "watch": "webpack --watch"
+    "watch": "webpack --watch",
+    "dev": "concurrently \"node app.js\" \"npm run watch\""
   },
   "keywords": [],
   "author": "",
@@ -20,7 +21,9 @@
     "@types/uuid": "^8.3.4",
     "@webpack-cli/generators": "^2.5.0",
     "autoprefixer": "^10.4.7",
+    "concurrently": "^7.3.0",
     "css-loader": "^6.7.1",
+    "express": "^4.18.1",
     "html-webpack-plugin": "^5.5.0",
     "mini-css-extract-plugin": "^2.6.1",
     "postcss": "^8.4.14",

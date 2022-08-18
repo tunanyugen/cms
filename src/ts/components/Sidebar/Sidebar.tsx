@@ -11,7 +11,7 @@ class Sidebar extends Component<SidebarProps, SidebarState> {
     constructor(props: SidebarProps) {
         super(props);
         this._subscriptionIndices = GlobalState.bulkSubscribe([GlobalStateAttributes.sidebarItems], () => {
-            if (this._mounted){
+            if (this._mounted) {
                 this.forceUpdate();
             }
         });

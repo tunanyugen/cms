@@ -7,6 +7,8 @@ import { ThemeContext } from "..";
 import ArticleForm from "./components/Form/ArticleForm";
 import Component from "./component";
 import { Routes, Route } from "react-router-dom";
+import GalleryForm from "./components/Form/GalleryForm";
+import ValueForm from "./components/Form/ValueForm";
 
 export interface AppProps {}
 
@@ -26,7 +28,7 @@ class App extends Component<AppProps, AppState> {
                 GlobalStateAttributes.navbarY,
             ],
             () => {
-                if (this._mounted) {
+                if (this._mounted){
                     this.forceUpdate();
                 }
             }
@@ -70,7 +72,30 @@ class App extends Component<AppProps, AppState> {
                     </Box>
                     <Paper className="app__content-container">
                         <Routes>
-                            <Route path="*" element={<ArticleForm id="" parentArticleTitle="" title="" content="" />} />
+                            <Route path="article" element={<ArticleForm id="" parentArticleTitle="" title="" content="" />} />
+                            <Route path="gallery" element={<GalleryForm id="" name="" images={[
+                                {
+                                    id: "1",
+                                    name: "A",
+                                    src: "https://static.scientificamerican.com/sciam/cache/file/7A715AD8-449D-4B5A-ABA2C5D92D9B5A21_source.png",
+                                },
+                                {
+                                    id: "1",
+                                    name: "A",
+                                    src: "https://static.scientificamerican.com/sciam/cache/file/7A715AD8-449D-4B5A-ABA2C5D92D9B5A21_source.png",
+                                },
+                                {
+                                    id: "1",
+                                    name: "A",
+                                    src: "https://static.scientificamerican.com/sciam/cache/file/7A715AD8-449D-4B5A-ABA2C5D92D9B5A21_source.png",
+                                },
+                                {
+                                    id: "1",
+                                    name: "A",
+                                    src: "https://static.scientificamerican.com/sciam/cache/file/7A715AD8-449D-4B5A-ABA2C5D92D9B5A21_source.png",
+                                },
+                            ]} />} />
+                            <Route path="value" element={<ValueForm id="" name="" value="" />} />
                         </Routes>
                     </Paper>
                 </Box>
